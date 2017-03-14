@@ -9,9 +9,11 @@ module Api
     private
 
     def code_snippets
+      klass = params.require(:board_type).constantize
       params.require(:link_types).to_a.map do |link|
         {
-          code: Led.instance_method(link.to_sym).source.strip
+          name: link,
+          code: klass.instance_method(link.to_sym).source.strip
         }
       end
     end
