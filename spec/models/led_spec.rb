@@ -11,13 +11,13 @@ RSpec.describe Led, type: :model do
   end
 
   it "has a valid factory" do
-    expect(FactoryGirl.create(:led)).to be_valid
+    expect(create(:led)).to be_valid
   end
 
   describe ".current_value" do
     it "returns pin value" do
-      [0, 1].each do |value|
-        led = FactoryGirl.create(:led, mac: "1", metadata: { Led::LED_PIN => value})
+      (0..1).each do |value|
+        led = create(:led, mac: "1", metadata: { Led::LED_PIN => value})
         expect( led.send(:current_value) ).to eq value
       end
     end
@@ -25,8 +25,8 @@ RSpec.describe Led, type: :model do
 
   describe ".update_board" do
     it "sets the correct value" do
-      led1 = FactoryGirl.create(:led, mac: "1")
-      led2 = FactoryGirl.create(:led, mac: "2")
+      led1 = create(:led, mac: "1")
+      led2 = create(:led, mac: "2")
 
       led1.send(:update_board, 1)
       led2.send(:update_board, 0)
@@ -38,12 +38,33 @@ RSpec.describe Led, type: :model do
 
   describe ".toggle" do
     it "flips the led value" do
-      led = FactoryGirl.create(:led, mac: "1")
-      [0, 1].each do | value |
+      led = create(:led, mac: "1")
+      (0..1).each do |value|
         led.send(:update_board, value)
         led.send(:toggle)
         expect(led.send(:current_value)).to eq (value+1)%2
       end
+    end
+  end
+
+  describe "blink" do
+    let(:led) { create(:led) }
+
+    before do
+      allow_any_instance_of(Led).to receive(:toggle).and_return true
+      allow_any_instance_of(Led).to receive(:sleep).and_return true
+    end
+
+    it "calls toggle twice" do
+      led.blink
+
+      expect(led).to have_received(:toggle).exactly(2).times
+    end
+
+    it "calls sleep once" do
+      led.blink
+
+      expect(led).to have_received(:sleep).exactly(1).times.with(1)
     end
   end
 
