@@ -66,6 +66,7 @@ class Board < ApplicationRecord
 
   def broadcast
     Log.sent "Board: #{name}<#{mac}> broadcasting (#{metadata}) to channel"
+    ActionCable.server.broadcast "watcher_channel#{user_id}", message: metadata
     ActionCable.server.broadcast "sketch_channel#{mac}", message: metadata
   end
 
