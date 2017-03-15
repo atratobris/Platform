@@ -20,21 +20,21 @@
 class Input < Board
 
   def get_methods
-    { run: "default method" }
+    { run: "activate" }
+  end
+
+  def broadcast
+    Log.sent "Input Board: #{name}<#{mac}> triggered"
+    ActionCable.server.broadcast "watcher_channel#{user_id}", message: board_activity
   end
 
   def run
+    broadcast
     sketch = find_sketch
     links = find_boards sketch, key: 'from'
     links.each do |link|
       b = Board.find_by mac: link['to']
-      logger.debug "Running #{link['logic']} for #{b.name} #{b.mac}"
-      if b.get_methods.has_key?(link["logic"].to_sym)
-        b.public_send(link["logic"])
-      else
-        logger.debug "Board #{b.mac} doesn't support logic #{link['logic']}"
-        Log.error "Board #{b.name}<#{b.mac}> doesn't support logic #{link['logic']}"
-      end
+      BoardActionJob.perform_now b, link['logic']
     end
     super
   end

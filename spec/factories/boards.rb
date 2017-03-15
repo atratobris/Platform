@@ -23,4 +23,10 @@ FactoryGirl.define do
     mac "1234"
     register_status "registered"
   end
+
+  factory :led do
+    type "Led"
+    mac "1234"
+    register_status "registered"
+  end
 end
