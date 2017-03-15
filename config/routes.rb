@@ -16,6 +16,7 @@ Rails.application.routes.draw do
     end
     resources :sketch, only: [:index, :show, :create, :update, :destroy]
     resources :links, only: [:index]
+    resources :code_snippet, only: [:index]
     resources :marketplace, only: [:index] do
       collection do
         post :purchase
