@@ -23,7 +23,13 @@ class Input < Board
     { run: "activate" }
   end
 
+  def broadcast
+    Log.sent "Input Board: #{name}<#{mac}> triggered"
+    ActionCable.server.broadcast "watcher_channel#{user_id}", message: board_activity
+  end
+
   def run
+    broadcast
     sketch = find_sketch
     links = find_boards sketch, key: 'from'
     links.each do |link|

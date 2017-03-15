@@ -64,11 +64,16 @@ class Board < ApplicationRecord
 
   protected
 
+  def board_activity
+    { mac: mac }
+  end
+
   def broadcast
     Log.sent "Board: #{name}<#{mac}> broadcasting (#{metadata}) to channel"
-    ActionCable.server.broadcast "watcher_channel#{user_id}", message: metadata
+    ActionCable.server.broadcast "watcher_channel#{user_id}", message: board_activity
     ActionCable.server.broadcast "sketch_channel#{mac}", message: metadata
   end
+
 
   def find_sketch
     logger.debug "Finding sketch for #{mac}"
