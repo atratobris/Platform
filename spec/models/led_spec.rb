@@ -4,8 +4,7 @@ require 'rails_helper'
 require 'spec_helper'
 
 RSpec.describe Led, type: :model do
-  let!(:led1) { create(:board, mac: "1234", type: "Led") }
-
+  
   it "is valid" do
     expect(build(:board)).to be_valid
   end
