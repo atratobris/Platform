@@ -1,10 +1,10 @@
-#
-
 require 'rails_helper'
-require 'spec_helper'
 
 RSpec.describe Led, type: :model do
-  
+  before do
+    allow_any_instance_of(Led).to receive(:broadcast).and_return true
+  end
+
   it "is valid" do
     expect(build(:board)).to be_valid
   end
