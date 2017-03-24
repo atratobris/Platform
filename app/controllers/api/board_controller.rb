@@ -3,7 +3,7 @@ module Api
     before_action :find_board, only: [:show, :update, :deregister]
 
     def index
-      @boards = board_scope.registered.order(:id).limit 10
+      @boards = board_scope.registered.order(:id).limit 20
       respond_to do |format|
         format.json { render json: @boards, each_serializer: BoardSerializer }
       end

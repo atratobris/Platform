@@ -1,9 +1,7 @@
 class WatcherChannel < ApplicationCable::Channel
   CHANNEL_NAME = "WatcherChannel"
   def subscribed
-    if user = User.find params.require(:user_id)
-      stream_from "watcher_channel#{user.id}"
-    end
+    stream_from "watcher_channel#{params[:user_id]}"
   end
 
   def unsubscribed
