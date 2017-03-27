@@ -6,6 +6,12 @@ module Api
       end
     end
 
+    def sketch
+      respond_to do |format|
+        format.json { render json: sketch_code }
+      end
+    end
+
     private
 
     def code_snippets
@@ -16,6 +22,13 @@ module Api
           code: klass.instance_method(link.to_sym).source.strip
         }
       end
+    end
+
+    def sketch_code
+      {
+        name: "Sketch Code",
+        code: Sketch::CodeGenerator.new(params.require(:sketch_id)).generate
+      }
     end
   end
 end

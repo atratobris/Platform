@@ -19,6 +19,6 @@
 
 FactoryGirl.define do
   factory :sketch do
-    
+    status "active"
   end
 end

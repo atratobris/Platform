@@ -20,13 +20,13 @@
 FactoryGirl.define do
   factory :board do
     type "Input"
-    mac "1234"
+    mac { SecureRandom.hex.first(4) }
     register_status "registered"
   end
 
   factory :led do
     type "Led"
-    mac "1234"
+    mac { SecureRandom.hex.first(4) }
     register_status "registered"
   end
 end
