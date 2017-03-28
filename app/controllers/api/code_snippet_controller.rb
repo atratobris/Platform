@@ -13,7 +13,8 @@ module Api
       params.require(:link_types).to_a.map do |link|
         {
           name: link,
-          code: klass.instance_method(link.to_sym).source.strip
+          code: klass.instance_method(link.to_sym).source.strip,
+          parameters: klass.instance_method(link.to_sym).parameters
         }
       end
     end
