@@ -42,9 +42,9 @@ class Led < Board
     broadcast
   end
 
-  def blink
+  def blink(timeout=1)
     toggle
-    sleep(1)
+    sleep(timeout)
     toggle
   end
 
