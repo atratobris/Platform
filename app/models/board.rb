@@ -18,7 +18,7 @@
 #
 
 class Board < ApplicationRecord
-  BOARD_TYPES = %w[ Input Lcd Led Pseudoboard Screen Logicboard ]
+  BOARD_TYPES = %w[ Input Lcd Led Pseudoboard Screen Logicboard Andboard]
   SketchNotFound = Class.new(RuntimeError)
   include BoardHelper
 

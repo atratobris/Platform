@@ -17,24 +17,35 @@
 #  ip              :string
 #
 
-class Input < Board
+class Andboard < Board
 
   def get_methods
-    { run: "activate" }
+    { add: "+ one" }
   end
 
-  def broadcast
-    Log.sent "Input Board: #{name}<#{mac}> triggered"
-    ActionCable.server.broadcast "watcher_channel#{user_id}", message: board_activity
-  end
-
-  def run
+  def add
+    update_board current_value+1
     broadcast
+    if current_value == 0
+      activate_boards
+    end
+  end
+
+  def activate_boards
     sketch = find_sketch
     links = find_boards sketch, key: 'from'
     links.each do |link|
-      Link.new(link['from'], link['to'], link['logic']).run
+      b = Board.find_by mac: link['to']
+      BoardActionJob.perform_now b, link['logic']
     end
-    super
   end
+
+  def current_value
+    metadata["total"].to_i
+  end
+
+  def update_board value
+    update! metadata: { "total" => value%2 }
+  end
+
 end
