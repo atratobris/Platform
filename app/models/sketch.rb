@@ -23,6 +23,7 @@ class Sketch < ApplicationRecord
   belongs_to :creator, class_name: 'User', optional: true
 
   # before_save :disable_other_active_sketches, on: :update
+  before_save :update_boards_metadata, on: :update
 
   enum status: {
     closed: 0,
@@ -45,6 +46,16 @@ class Sketch < ApplicationRecord
   end
 
   private
+
+  def update_boards_metadata
+    boards.each do |board|
+      Board.find_by(mac: board['mac']).clear_boards_metadata
+    end
+    links.each do |link|
+      Board.find_by(mac: link['to']).add_in_board link['from']
+      Board.find_by(mac: link['from']).add_out_board link['to']
+    end
+  end
 
   def disable_other_active_sketches
     return unless status_changed? && status == "active"

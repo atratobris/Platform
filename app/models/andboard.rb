@@ -23,12 +23,26 @@ class Andboard < Board
     { add: "+ one" }
   end
 
-  def add
-    update_board current_value+1
-    broadcast
-    if current_value == 0
-      activate_boards
+  def add mac
+    if metadata["in_boards"].include?(mac)
+      if metadata["#{mac}"].zero?
+        set_mac_signal mac, 1
+      else
+        set_mac_signal mac, 0
+      end
+      activate_boards if condition_true
     end
+  end
+
+  def required_info
+    { add: "mac" }
+  end
+
+  def condition_true
+    metadata['in_boards'].each do |b|
+      return false if metadata[b].zero?
+    end
+    return true
   end
 
   def activate_boards
@@ -44,7 +58,15 @@ class Andboard < Board
     metadata["total"].to_i
   end
 
+  def set_mac_signal mac, signal
+    m = metadata
+    m["#{mac}"] = signal
+    update! metadata: m
+  end
+
   def update_board value
+    # m = metadata
+    # metadata
     update! metadata: { "total" => value%2 }
   end
 

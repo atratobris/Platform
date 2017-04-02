@@ -7,6 +7,10 @@ class Link
   end
 
   def run
-    BoardActionJob.perform_now @to_board, @logic
+    if @logic == "add"
+      @to_board.public_send(@logic, @from_board.mac)
+    else
+      BoardActionJob.perform_now @to_board, @logic
+    end
   end
 end
