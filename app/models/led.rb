@@ -21,7 +21,7 @@
 class Led < RealBoard
   LED_PIN = 13.to_s
 
-  def get_methods
+  def self.get_methods
     {
       toggle: "turn on or off",
       blink: "blink once",

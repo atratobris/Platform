@@ -20,7 +20,7 @@
 
 class Lcd < RealBoard
 
-  def get_methods
+  def self.get_methods
     {
       sync_data: "Get article headline"
     }

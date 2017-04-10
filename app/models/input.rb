@@ -20,7 +20,7 @@
 
 class Input < RealBoard
 
-  def get_methods
+  def self.get_methods
     { run: "activate" }
   end
 

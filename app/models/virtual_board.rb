@@ -19,5 +19,8 @@
 #
 
 class VirtualBoard < Board
-
+  def self.subtypes
+    ["Pseudoboard"]
+  end
+  after_create :add_link_types
 end

@@ -47,7 +47,7 @@ class Board < ApplicationRecord
     sync_data
   end
 
-  def get_methods
+  def self.get_methods
     {}
   end
 
@@ -89,8 +89,8 @@ class Board < ApplicationRecord
   end
 
   def add_link_types
-    return if accepted_links.with_indifferent_access == get_methods.with_indifferent_access()
-    update! accepted_links: get_methods
+    return if accepted_links.with_indifferent_access == subtype.constantize.get_methods.with_indifferent_access()
+    update! accepted_links: subtype.constantize.get_methods
   end
 
   def update_last_active

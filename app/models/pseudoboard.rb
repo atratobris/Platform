@@ -20,7 +20,7 @@
 
 class Pseudoboard < VirtualBoard
 
-  def get_methods
+  def self.get_methods
     {
       next: "change article"
     }
