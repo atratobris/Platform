@@ -26,8 +26,8 @@ class Board < ApplicationRecord
   # validates :type, inclusion: { in: BOARD_TYPES, message: "must be one of #{BOARD_TYPES}" }, presence: true
 
   belongs_to :user, optional: true
-  before_validation :update_last_active, on: :update
   after_commit :add_link_types, on: [:update, :create]
+
 
   enum status: {
     offline: 0,
@@ -75,7 +75,6 @@ class Board < ApplicationRecord
     ActionCable.server.broadcast "sketch_channel#{mac}", message: metadata
   end
 
-
   def find_sketch
     logger.debug "Finding sketch for #{mac}"
     # There should be no problem interpolating here because the mac is a db value
@@ -109,7 +108,8 @@ class Board < ApplicationRecord
     links.each do |link|
       if link["from"] == mac
         # gets data from this board into the other one
-        Board.find_by(mac: link["to"]).sync self
+        b = Board.find_by(mac: link["to"])
+        b.becomes(b.subtype.constantize).sync self
       end
     end
   end

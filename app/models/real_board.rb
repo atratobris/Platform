@@ -19,4 +19,5 @@
 #
 
 class RealBoard < Board
+  before_validation :update_last_active, on: :update
 end
