@@ -18,33 +18,6 @@
 #  subtype         :string
 #
 
-class Lcd < RealBoard
-
-  def get_methods
-    {
-      sync_data: "Get article headline"
-    }
-  end
-
-  def run
-    broadcast
-  end
-
-  def sync board
-    update_board board.metadata.dig("value")
-  end
-
-  def hello
-    update_board "hello world"
-  end
-
-  def buna
-    update_board "buna dimineata"
-  end
-
-  def update_board value
-    update! metadata: { type: 'lcd_display', value: value }
-    broadcast
-  end
+class VirtualBoard < Board
 
 end

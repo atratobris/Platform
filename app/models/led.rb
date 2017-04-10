@@ -15,9 +15,10 @@
 #  register_status :integer          default("unregistered")
 #  user_id         :integer
 #  ip              :string
+#  subtype         :string
 #
 
-class Led < Board
+class Led < RealBoard
   LED_PIN = 13.to_s
 
   def get_methods

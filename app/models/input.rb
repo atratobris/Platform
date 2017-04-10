@@ -15,9 +15,10 @@
 #  register_status :integer          default("unregistered")
 #  user_id         :integer
 #  ip              :string
+#  subtype         :string
 #
 
-class Input < Board
+class Input < RealBoard
 
   def get_methods
     { run: "activate" }
@@ -34,6 +35,7 @@ class Input < Board
     links = find_boards sketch, key: 'from'
     links.each do |link|
       b = Board.find_by mac: link['to']
+      b = b.becomes(b.subtype.constantize)
       BoardActionJob.perform_now b, link['logic']
     end
     super

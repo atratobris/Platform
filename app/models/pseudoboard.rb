@@ -15,9 +15,10 @@
 #  register_status :integer          default("unregistered")
 #  user_id         :integer
 #  ip              :string
+#  subtype         :string
 #
 
-class Pseudoboard < Board
+class Pseudoboard < VirtualBoard
 
   def get_methods
     {

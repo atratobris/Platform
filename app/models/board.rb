@@ -15,14 +15,15 @@
 #  register_status :integer          default("unregistered")
 #  user_id         :integer
 #  ip              :string
+#  subtype         :string
 #
 
 class Board < ApplicationRecord
-  BOARD_TYPES = %w[ Input Lcd Led Pseudoboard Screen ]
+  # BOARD_TYPES = %w[ Input Lcd Led Pseudoboard Screen ]
   SketchNotFound = Class.new(RuntimeError)
   include BoardHelper
 
-  validates :type, inclusion: { in: BOARD_TYPES, message: "must be one of #{BOARD_TYPES}" }, presence: true
+  # validates :type, inclusion: { in: BOARD_TYPES, message: "must be one of #{BOARD_TYPES}" }, presence: true
 
   belongs_to :user, optional: true
   before_validation :update_last_active, on: :update
