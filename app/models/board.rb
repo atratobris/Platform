@@ -32,6 +32,7 @@ class Board < ApplicationRecord
   enum status: {
     offline: 0,
     online: 1
+
   }
 
   enum register_status: {
@@ -61,6 +62,26 @@ class Board < ApplicationRecord
 
   def user_details
     "#{user&.name}<#{user&.email}>"
+  end
+
+
+  def add_in_board mac
+    m = metadata
+    m["in_boards"].push mac
+    update! metadata: m
+  end
+
+  def add_out_board mac
+    m = metadata
+    m["out_boards"].push mac
+    update! metadata: m
+  end
+
+  def clear_boards_metadata
+    m = metadata
+    m['in_boards'] =  []
+    m['out_boards'] = []
+    update! metadata: m
   end
 
   protected
@@ -101,6 +122,11 @@ class Board < ApplicationRecord
   def sync board
   end
 
+  def required_info
+    {}
+  end
+
+
   # sync the boards which have an ingoing sync_data link from this board
   def sync_data
     sketch = find_sketch
@@ -113,6 +139,7 @@ class Board < ApplicationRecord
       end
     end
   end
+
 
   def alert_error
     Log.create! log_type: "error", message: "Couldn't find active sketch for #{name}<#{mac}>"
