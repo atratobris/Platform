@@ -10,63 +10,64 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170310002332) do
+ActiveRecord::Schema.define(version: 20170409225650) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
-  create_table "boards", force: :cascade do |t|
-    t.string   "mac",                                      null: false
-    t.datetime "created_at",                               null: false
-    t.datetime "updated_at",                               null: false
-    t.integer  "status",          default: 0
-    t.jsonb    "metadata",        default: {}
-    t.string   "name",            default: ""
-    t.datetime "last_active",     default: -> { "now()" }
-    t.string   "type"
-    t.jsonb    "accepted_links",  default: {}
-    t.integer  "register_status", default: 0
-    t.integer  "user_id"
-    t.string   "ip"
+  create_table "boards", id: :serial, force: :cascade do |t|
+    t.string "mac", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.integer "status", default: 0
+    t.jsonb "metadata", default: {}
+    t.string "name", default: ""
+    t.datetime "last_active", default: -> { "now()" }
+    t.string "type"
+    t.jsonb "accepted_links", default: {}
+    t.integer "register_status", default: 0
+    t.integer "user_id"
+    t.string "ip"
+    t.string "subtype"
   end
 
-  create_table "external_data", force: :cascade do |t|
-    t.integer  "source_type"
-    t.jsonb    "data"
-    t.string   "name"
-    t.string   "url"
-    t.datetime "created_at",  null: false
-    t.datetime "updated_at",  null: false
-  end
-
-  create_table "logs", force: :cascade do |t|
-    t.integer  "log_type"
-    t.string   "message"
+  create_table "external_data", id: :serial, force: :cascade do |t|
+    t.integer "source_type"
+    t.jsonb "data"
+    t.string "name"
+    t.string "url"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
 
-  create_table "sketches", force: :cascade do |t|
-    t.jsonb    "links",        default: [],    null: false
-    t.jsonb    "boards",       default: [],    null: false
-    t.datetime "created_at",                   null: false
-    t.datetime "updated_at",                   null: false
+  create_table "logs", id: :serial, force: :cascade do |t|
+    t.integer "log_type"
+    t.string "message"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "sketches", id: :serial, force: :cascade do |t|
+    t.jsonb "links", default: [], null: false
+    t.jsonb "boards", default: [], null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.datetime "published_at"
     t.datetime "trashed_at"
-    t.integer  "status",       default: 0
-    t.string   "name",         default: ""
-    t.integer  "user_id"
-    t.integer  "creator_id"
-    t.boolean  "listed",       default: false
-    t.string   "description",  default: ""
+    t.integer "status", default: 0
+    t.string "name", default: ""
+    t.integer "user_id"
+    t.integer "creator_id"
+    t.boolean "listed", default: false
+    t.string "description", default: ""
   end
 
-  create_table "users", force: :cascade do |t|
-    t.string   "name",       null: false
-    t.string   "email",      null: false
+  create_table "users", id: :serial, force: :cascade do |t|
+    t.string "name", null: false
+    t.string "email", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["email"], name: "index_users_on_email", using: :btree
+    t.index ["email"], name: "index_users_on_email"
   end
 
 end

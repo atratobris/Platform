@@ -15,11 +15,12 @@
 #  register_status :integer          default("unregistered")
 #  user_id         :integer
 #  ip              :string
+#  subtype         :string
 #
 
-class Lcd < Board
+class Lcd < RealBoard
 
-  def get_methods
+  def self.get_methods
     {
       sync_data: "Get article headline"
     }

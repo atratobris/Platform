@@ -15,14 +15,16 @@
 #  register_status :integer          default("unregistered")
 #  user_id         :integer
 #  ip              :string
+#  subtype         :string
 #
 
 class BoardSerializer < ActiveModel::Serializer
   include ActionView::Helpers::DateHelper
 
-  attributes :id, :mac, :status, :name, :last_activity, :type, :accepted_links
+  attributes :id, :mac, :status, :name, :last_activity, :type, :accepted_links, :metadata, :subtype
 
   def last_activity
-    "#{distance_of_time_in_words(Time.now, object.last_active, include_seconds: true)} ago"
+    # "#{distance_of_time_in_words(Time.now, object.last_active, include_seconds: true)} ago"
+    ""
   end
 end

@@ -21,6 +21,7 @@ class Sketch < ApplicationRecord
 
   belongs_to :user, optional: true
   belongs_to :creator, class_name: 'User', optional: true
+  before_save :update_boards_metadata, on: :update
 
   # before_save :disable_other_active_sketches, on: :update
   before_save :update_boards_metadata, on: :update
@@ -43,6 +44,17 @@ class Sketch < ApplicationRecord
 
   def user_details
     "#{user&.name}<#{user&.email}>"
+  end
+
+  def update_boards_metadata
+    boards.each do |board|
+      if board["boardConfig"]["type"] == "VirtualBoard"
+        board = board["boardConfig"]
+        board = board.slice("mac", "name", "type", "subtype")
+        board["user_id"] = user_id
+        Board.find_or_create_by(board)
+      end
+    end
   end
 
   private

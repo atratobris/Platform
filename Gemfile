@@ -8,37 +8,33 @@ git_source(:github) do |repo_name|
 end
 
 # CORE
-gem 'rails', '~> 5.0.2'
-gem 'pg', '~> 0.18'
-gem 'puma', '~> 3.0'
-gem 'sidekiq', '~> 4.2.2'
+gem 'rails', '5.1.0.rc1'
+gem 'pg', '~> 0.20'
+gem 'puma', '~> 3.8.2'
+gem 'sidekiq', '~> 4.2.10'
 gem 'redis-namespace'
 gem 'rack-cors', require: 'rack/cors'
-gem 'administrate', '~> 0.3.0'
+gem 'administrate', '~> 0.4.0'
 gem 'administrate-field-json', '~> 0.0.4'
 gem 'bourbon', '~> 4.3.3'
 gem 'binding_of_caller'
 
 # API
-gem 'active_model_serializers', '~> 0.10.0'
+gem 'active_model_serializers', '~> 0.10.5'
 
 # ASSETS
 gem 'turbolinks', '~> 5'
 gem 'sass-rails', '~> 5.0'
-gem 'uglifier', '~> 3.1.3'
+gem 'uglifier', '~> 3.1.9'
 gem 'coffee-rails', '~> 4.2'
-gem 'jquery-rails'
+gem 'jquery-rails', '~> 4.3.1'
 
 
 # DEPLOYMENT
 gem 'morpheus-heroku', '0.2.3'
-gem 'capistrano-rails'
-gem 'capistrano', '~> 3.7.2'
-gem 'capistrano-bower'
 
 # MISC
 gem 'faraday', '~> 0.11.0'
-gem 'aws-sdk', '~> 2.8.0'
 gem 'rails_12factor', group: :production
 
 group :development, :test do
@@ -50,7 +46,7 @@ group :development, :test do
   gem 'pry-remote'
   gem 'factory_girl_rails'
   gem 'ffaker'
-  gem 'simplecov', require: false
+  gem 'simplecov', '~> 0.14.1', require: false
 end
 
 group :development do

@@ -15,6 +15,7 @@
 #  register_status :integer          default("unregistered")
 #  user_id         :integer
 #  ip              :string
+#  subtype         :string
 #
 
 FactoryGirl.define do

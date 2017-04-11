@@ -3,7 +3,18 @@ module Api
     before_action :find_board, only: [:show, :update, :deregister]
 
     def index
-      @boards = board_scope.registered.order(:id).limit 20
+      if params[:type]=="RealBoard"
+        @boards = board_scope.where(params.permit(:type)).registered.order(:id).limit 10
+
+      else
+        @boards = VirtualBoard.subtypes.map { |subtype|
+          board_class = subtype.constantize
+          b = VirtualBoard.new
+          b.accepted_links = board_class.get_methods
+          b.subtype = subtype
+          b
+        }
+      end
       respond_to do |format|
         format.json { render json: @boards, each_serializer: BoardSerializer }
       end
@@ -52,7 +63,7 @@ module Api
     end
 
     def update_board_params
-      params.permit(:name, :type)
+      params.permit(:name, :type, metadata: [:status, "13"])
     end
 
     def find_board

@@ -11,6 +11,7 @@
 
 class Log < ApplicationRecord
   CHANNEL = 'log_channel'
+  LOG_LIMIT = 50
 
   enum log_type: {
     error: 0,
@@ -24,7 +25,7 @@ class Log < ApplicationRecord
   after_commit :send_channel_update, on: :create
 
   scope :latest_logs, -> {
-    ids = where(created_at: (Time.now.beginning_of_day..Time.now.end_of_day)).order("id desc").limit(20).pluck(:id)
+    ids = where(created_at: (Time.now.beginning_of_day..Time.now.end_of_day)).order("id desc").limit(LOG_LIMIT).pluck(:id)
     where(id: ids).order("id asc")
   }
 

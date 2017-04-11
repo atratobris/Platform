@@ -18,27 +18,9 @@
 #  subtype         :string
 #
 
-class Input < RealBoard
-
-  def self.get_methods
-    { run: "activate" }
+class VirtualBoard < Board
+  def self.subtypes
+    ["Pseudoboard"]
   end
-
-  def broadcast
-    Log.sent "Input Board: #{name}<#{mac}> triggered"
-    ActionCable.server.broadcast "watcher_channel#{user_id}", message: board_activity
-  end
-
-  def run
-    broadcast
-    sketch = find_sketch
-    links = find_boards sketch, key: 'from'
-    links.each do |link|
-      Link.new(link['from'], link['to'], link['logic']).run
-#       b = Board.find_by mac: link['to']
-#       b = b.becomes(b.subtype.constantize)
-#       BoardActionJob.perform_now b, link['logic']
-    end
-    super
-  end
+  after_create :add_link_types
 end
