@@ -33,7 +33,7 @@ class Logicboard < Board
     while true
       broadcast
       sketch = find_sketch
-      links = find_boards sketch, key: 'from'
+      links = find_links sketch, key: 'from'
       links.each do |link|
         b = Board.find_by mac: link['to']
         BoardActionJob.perform_later b, link['logic']

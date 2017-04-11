@@ -32,7 +32,7 @@ class Input < RealBoard
   def run
     broadcast
     sketch = find_sketch
-    links = find_boards sketch, key: 'from'
+    links = find_links sketch, key: 'from'
     links.each do |link|
       Link.new(link['from'], link['to'], link['logic']).run
 #       b = Board.find_by mac: link['to']

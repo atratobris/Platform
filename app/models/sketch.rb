@@ -47,20 +47,16 @@ class Sketch < ApplicationRecord
   end
 
   def update_boards_metadata
-  end
-
-
-  def update_boards_metadata
     boards.each do |board|
       if board["boardConfig"]["type"] == "VirtualBoard"
         board = board["boardConfig"]
         board = board.slice("mac", "name", "type", "subtype")
         board["user_id"] = user_id
-        b = Board.find_or_create_by(board)
-        b.clear_boards_metadata
+        Board.find_or_create_by(board)
       end
+      Board.find_by(mac: board['mac']).clear_boards_metadata
     end
-      links.each do |link|
+    links.each do |link|
       Board.find_by(mac: link['to']).add_in_board link['from']
       Board.find_by(mac: link['from']).add_out_board link['to']
     end

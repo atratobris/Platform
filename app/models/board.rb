@@ -105,7 +105,7 @@ class Board < ApplicationRecord
       .first or alert_error
   end
 
-  def find_boards sketch, key: "from"
+  def find_links sketch, key: "from"
     sketch.links.select{ |l| l[key] == mac }
   end
 

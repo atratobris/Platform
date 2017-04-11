@@ -25,7 +25,7 @@ class Andboard < VirtualBoard
 
   def add mac
     if metadata["in_boards"].include?(mac)
-      if metadata["#{mac}"].zero?
+      if metadata["#{mac}"].to_i.zero?
         set_mac_signal mac, 1
       else
         set_mac_signal mac, 0
@@ -40,14 +40,14 @@ class Andboard < VirtualBoard
 
   def condition_true
     metadata['in_boards'].each do |b|
-      return false if metadata[b].zero?
+      return false if metadata[b].to_i.zero?
     end
     return true
   end
 
   def activate_boards
     sketch = find_sketch
-    links = find_boards sketch, key: 'from'
+    links = find_links sketch, key: 'from'
     links.each do |link|
       b = Board.find_by mac: link['to']
       BoardActionJob.perform_now b, link['logic']
