@@ -18,7 +18,7 @@
 #  subtype         :string
 #
 
-class Input < RealBoard
+class Input < Board
 
   def get_methods
     { run: "activate" }

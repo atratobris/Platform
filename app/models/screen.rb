@@ -18,7 +18,7 @@
 #  subtype         :string
 #
 
-class Screen < RealBoard
+class Screen < Board
 
   def get_methods
     {

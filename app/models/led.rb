@@ -18,7 +18,7 @@
 #  subtype         :string
 #
 
-class Led < RealBoard
+class Led < Board
   LED_PIN = 13.to_s
 
   def get_methods

@@ -18,7 +18,7 @@
 #  subtype         :string
 #
 
-class NewsArticles < VirtualBoard
+class NewsArticles < Board
 
   def get_methods
     {

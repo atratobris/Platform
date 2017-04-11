@@ -18,7 +18,7 @@
 #  subtype         :string
 #
 
-class Andboard < VirtualBoard
+class Andboard < Board
 
   def get_methods
     { add: "+ one" }
