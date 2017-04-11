@@ -20,7 +20,7 @@
 
 class Screen < RealBoard
 
-  def self.get_methods
+  def get_methods
     {
       run: "open article",
       sync_data: "get article website"

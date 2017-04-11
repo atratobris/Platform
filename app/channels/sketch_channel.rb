@@ -19,10 +19,8 @@ class SketchChannel < ApplicationCable::Channel
 
   def blink data
     if board = Board.find_by(mac: params[:mac])
-      board = board.becomes(board.subtype.constantize)
       Log.received "Received input from #{board.name}<#{board.mac}>"
       InputBroadcastJob.new.perform board
-      # board.run
     end
   end
 

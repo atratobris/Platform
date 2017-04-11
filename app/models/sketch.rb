@@ -48,7 +48,7 @@ class Sketch < ApplicationRecord
 
   def update_boards_metadata
     boards.each do |board|
-      if board["boardConfig"]["type"] == "VirtualBoard"
+      if board["boardConfig"]["subtype"] == "VirtualBoard"
         board = board["boardConfig"]
         board = board.slice("mac", "name", "type", "subtype")
         board["user_id"] = user_id

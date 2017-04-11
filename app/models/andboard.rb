@@ -15,11 +15,12 @@
 #  register_status :integer          default("unregistered")
 #  user_id         :integer
 #  ip              :string
+#  subtype         :string
 #
 
 class Andboard < VirtualBoard
 
-  def self.get_methods
+  def get_methods
     { add: "+ one" }
   end
 

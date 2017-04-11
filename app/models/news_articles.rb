@@ -18,9 +18,9 @@
 #  subtype         :string
 #
 
-class Pseudoboard < VirtualBoard
+class NewsArticles < VirtualBoard
 
-  def self.get_methods
+  def get_methods
     {
       next: "change article"
     }

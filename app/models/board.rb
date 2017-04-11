@@ -20,6 +20,7 @@
 
 class Board < ApplicationRecord
   # BOARD_TYPES = %w[ Input Lcd Led Pseudoboard Screen ]
+  VIRTUAL_BOARDS = ["NewsArticles", "Andboard"]
   SketchNotFound = Class.new(RuntimeError)
   include BoardHelper
 
@@ -27,7 +28,6 @@ class Board < ApplicationRecord
 
   belongs_to :user, optional: true
   after_commit :add_link_types, on: [:update, :create]
-
 
   enum status: {
     offline: 0,
@@ -48,7 +48,11 @@ class Board < ApplicationRecord
     sync_data
   end
 
-  def self.get_methods
+  def self.virtualBoards
+    VIRTUAL_BOARDS
+  end
+
+  def get_methods
     {}
   end
 
@@ -63,7 +67,6 @@ class Board < ApplicationRecord
   def user_details
     "#{user&.name}<#{user&.email}>"
   end
-
 
   def add_in_board mac
     m = metadata
@@ -110,8 +113,8 @@ class Board < ApplicationRecord
   end
 
   def add_link_types
-    return if accepted_links.with_indifferent_access == subtype.constantize.get_methods.with_indifferent_access()
-    update! accepted_links: subtype.constantize.get_methods
+    return if accepted_links.with_indifferent_access == get_methods.with_indifferent_access()
+    update! accepted_links: get_methods
   end
 
   def update_last_active
@@ -135,7 +138,7 @@ class Board < ApplicationRecord
       if link["from"] == mac
         # gets data from this board into the other one
         b = Board.find_by(mac: link["to"])
-        b.becomes(b.subtype.constantize).sync self
+        b.sync self
       end
     end
   end
