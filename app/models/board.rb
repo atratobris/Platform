@@ -26,6 +26,7 @@ class Board < ApplicationRecord
 
   # validates :type, inclusion: { in: BOARD_TYPES, message: "must be one of #{BOARD_TYPES}" }, presence: true
 
+  before_validation :update_last_active, on: :update
   belongs_to :user, optional: true
   after_commit :add_link_types, on: [:update, :create]
 
