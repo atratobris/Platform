@@ -17,9 +17,9 @@
 #  ip              :string
 #
 
-class Andboard < Board
+class Andboard < VirtualBoard
 
-  def get_methods
+  def self.get_methods
     { add: "+ one" }
   end
 
