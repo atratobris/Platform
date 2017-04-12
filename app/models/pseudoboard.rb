@@ -1,0 +1,3 @@
+class Pseudoboard < Board
+
+end
