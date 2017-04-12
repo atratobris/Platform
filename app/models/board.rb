@@ -29,6 +29,7 @@ class Board < ApplicationRecord
   before_validation :update_last_active, on: :update
   belongs_to :user, optional: true
   after_commit :add_link_types, on: [:update, :create]
+  after_commit  :set_subtype, on: [:create]
 
   enum status: {
     offline: 0,
@@ -57,6 +58,17 @@ class Board < ApplicationRecord
     {}
   end
 
+  def set_subtype
+
+    if VIRTUAL_BOARDS.include?(self.type)
+      return if subtype == "VirtualBoard"
+      update! subtype: "VirtualBoard"
+    else
+      return if subtype == "RealBoard"
+      update! subtype: "RealBoard"
+    end
+  end
+
   def show_delete_path
     Rails.application.routes.url_helpers.admin_board_path(id)
   end
@@ -68,6 +80,7 @@ class Board < ApplicationRecord
   def user_details
     "#{user&.name}<#{user&.email}>"
   end
+
 
   def add_in_board mac
     m = metadata

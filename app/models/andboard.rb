@@ -26,7 +26,7 @@ class Andboard < Board
 
   def add mac
     if metadata["in_boards"].include?(mac)
-      if metadata["#{mac}"].to_i.zero?
+      if metadata[mac].to_i.zero?
         set_mac_signal mac, 1
       else
         set_mac_signal mac, 0
@@ -43,7 +43,7 @@ class Andboard < Board
     metadata['in_boards'].each do |b|
       return false if metadata[b].to_i.zero?
     end
-    return true
+    true
   end
 
   def activate_boards
