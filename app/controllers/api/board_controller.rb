@@ -7,9 +7,8 @@ module Api
         @boards = board_scope.where(params.permit(:subtype)).registered.order(:id).limit 10
       else
         @boards = Board.virtualBoards.map { |class_name|
-          b = class_name.constantize.new
+          b = class_name.constantize.new(subtype: "VirtualBoard")
           b.accepted_links = b.get_methods
-          b.subtype = "VirtualBoard"
           b
         }
       end

@@ -59,7 +59,6 @@ class Board < ApplicationRecord
   end
 
   def set_subtype
-
     if VIRTUAL_BOARDS.include?(self.type)
       return if subtype == "VirtualBoard"
       update! subtype: "VirtualBoard"
