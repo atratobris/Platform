@@ -1,6 +1,6 @@
 class Link
   attr_reader :logic
-  
+
   def initialize from_mac, to_mac, logic
     @from_board = Board.find_by mac: from_mac
     @to_board = Board.find_by mac: to_mac
