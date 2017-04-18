@@ -8,7 +8,7 @@ class Link
   end
 
   def run
-    if logic == "add" and @to_board.get_methods.has_key?(logic.to_sym)
+    if logic == "add" && @to_board.get_methods.has_key?(logic.to_sym)
       @to_board.public_send(logic, @from_board.mac)
     else
       BoardActionJob.perform_now @to_board, logic
