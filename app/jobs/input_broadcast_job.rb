@@ -1,7 +1,7 @@
 class InputBroadcastJob < ApplicationJob
   queue_as :default
 
-  def perform data, board
+  def perform board
     board.run
   end
 end

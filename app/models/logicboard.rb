@@ -18,24 +18,33 @@
 #  subtype         :string
 #
 
-class Input < Board
+class Logicboard < Board
 
   def get_methods
-    { run: "activate" }
+    {
+      loop: "activate links"
+    }
   end
 
-  def broadcast
-    Log.sent "Input Board: #{name}<#{mac}> triggered"
-    ActionCable.server.broadcast "watcher_channel#{user_id}", message: board_activity
+  def loop
+    InputBroadcastJob.perform_now self
   end
 
   def run
-    broadcast
-    sketch = find_sketch
-    links = find_links sketch, key: 'from'
-    links.each do |link|
-      Link.new(link['from'], link['to'], link['logic']).run
+    while true
+      broadcast
+      sketch = find_sketch
+      links = find_links sketch, key: 'from'
+      links.each do |link|
+        b = Board.find_by mac: link['to']
+        BoardActionJob.perform_later b, link['logic']
+      end
+      sleep(1)
     end
-    super
   end
+
+  def update_board value, href, id
+    update! metadata: { value: value, id: id, href: href }
+  end
+
 end

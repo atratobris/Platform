@@ -15,22 +15,26 @@
 #  register_status :integer          default("unregistered")
 #  user_id         :integer
 #  ip              :string
+#  subtype         :string
 #
 
 class Board < ApplicationRecord
-  BOARD_TYPES = %w[ Input Lcd Led Pseudoboard Screen ]
+  # BOARD_TYPES = %w[ Input Lcd Led Pseudoboard Screen ]
+  VIRTUAL_BOARDS = ["NewsArticles", "Andboard"]
   SketchNotFound = Class.new(RuntimeError)
   include BoardHelper
 
-  validates :type, inclusion: { in: BOARD_TYPES, message: "must be one of #{BOARD_TYPES}" }, presence: true
+  # validates :type, inclusion: { in: BOARD_TYPES, message: "must be one of #{BOARD_TYPES}" }, presence: true
 
-  belongs_to :user, optional: true
   before_validation :update_last_active, on: :update
+  belongs_to :user, optional: true
   after_commit :add_link_types, on: [:update, :create]
+  after_commit  :set_subtype, on: [:create]
 
   enum status: {
     offline: 0,
     online: 1
+
   }
 
   enum register_status: {
@@ -46,8 +50,22 @@ class Board < ApplicationRecord
     sync_data
   end
 
+  def self.virtualBoards
+    VIRTUAL_BOARDS
+  end
+
   def get_methods
     {}
+  end
+
+  def set_subtype
+    if VIRTUAL_BOARDS.include?(self.type)
+      return if subtype == "VirtualBoard"
+      update! subtype: "VirtualBoard"
+    else
+      return if subtype == "RealBoard"
+      update! subtype: "RealBoard"
+    end
   end
 
   def show_delete_path
@@ -62,6 +80,26 @@ class Board < ApplicationRecord
     "#{user&.name}<#{user&.email}>"
   end
 
+
+  def add_in_board mac
+    m = metadata
+    m["in_boards"].push mac
+    update! metadata: m
+  end
+
+  def add_out_board mac
+    m = metadata
+    m["out_boards"].push mac
+    update! metadata: m
+  end
+
+  def clear_boards_metadata
+    m = metadata
+    m['in_boards'] =  []
+    m['out_boards'] = []
+    update! metadata: m
+  end
+
   protected
 
   def board_activity
@@ -74,7 +112,6 @@ class Board < ApplicationRecord
     ActionCable.server.broadcast "sketch_channel#{mac}", message: metadata
   end
 
-
   def find_sketch
     logger.debug "Finding sketch for #{mac}"
     # There should be no problem interpolating here because the mac is a db value
@@ -84,7 +121,7 @@ class Board < ApplicationRecord
       .first or alert_error
   end
 
-  def find_boards sketch, key: "from"
+  def find_links sketch, key: "from"
     sketch.links.select{ |l| l[key] == mac }
   end
 
@@ -101,6 +138,11 @@ class Board < ApplicationRecord
   def sync board
   end
 
+  def required_info
+    {}
+  end
+
+
   # sync the boards which have an ingoing sync_data link from this board
   def sync_data
     sketch = find_sketch
@@ -108,10 +150,12 @@ class Board < ApplicationRecord
     links.each do |link|
       if link["from"] == mac
         # gets data from this board into the other one
-        Board.find_by(mac: link["to"]).sync self
+        b = Board.find_by(mac: link["to"])
+        b.sync self
       end
     end
   end
+
 
   def alert_error
     Log.create! log_type: "error", message: "Couldn't find active sketch for #{name}<#{mac}>"

@@ -18,24 +18,6 @@
 #  subtype         :string
 #
 
-class Input < Board
-
-  def get_methods
-    { run: "activate" }
-  end
-
-  def broadcast
-    Log.sent "Input Board: #{name}<#{mac}> triggered"
-    ActionCable.server.broadcast "watcher_channel#{user_id}", message: board_activity
-  end
-
-  def run
-    broadcast
-    sketch = find_sketch
-    links = find_links sketch, key: 'from'
-    links.each do |link|
-      Link.new(link['from'], link['to'], link['logic']).run
-    end
-    super
-  end
+class VirtualBoardSerializer < ActiveModel::Serializer
+  attributes :id, :mac, :status, :name, :last_activity, :type, :accepted_links, :metadata, :subtype
 end

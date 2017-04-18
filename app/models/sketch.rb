@@ -21,8 +21,10 @@ class Sketch < ApplicationRecord
 
   belongs_to :user, optional: true
   belongs_to :creator, class_name: 'User', optional: true
+  before_save :update_boards_metadata, on: :update
 
   # before_save :disable_other_active_sketches, on: :update
+  before_save :update_boards_metadata, on: :update
 
   enum status: {
     closed: 0,
@@ -42,6 +44,22 @@ class Sketch < ApplicationRecord
 
   def user_details
     "#{user&.name}<#{user&.email}>"
+  end
+
+  def update_boards_metadata
+    boards.each do |board|
+      if board["boardConfig"]["subtype"] == "VirtualBoard"
+        board = board["boardConfig"]
+        board = board.slice("mac", "name", "type", "subtype")
+        board["user_id"] = user_id
+        Board.find_or_create_by(board)
+      end
+      Board.find_by(mac: board['mac']).clear_boards_metadata
+    end
+    links.each do |link|
+      Board.find_by(mac: link['to']).add_in_board link['from']
+      Board.find_by(mac: link['from']).add_out_board link['to']
+    end
   end
 
   private
