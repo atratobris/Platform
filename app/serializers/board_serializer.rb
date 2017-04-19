@@ -23,6 +23,10 @@ class BoardSerializer < ActiveModel::Serializer
 
   attributes :id, :mac, :status, :name, :last_activity, :type, :accepted_links, :metadata, :subtype
 
+  def metadata
+    object.public_metadata
+  end
+
   def last_activity
     # "#{distance_of_time_in_words(Time.now, object.last_active, include_seconds: true)} ago"
     ""

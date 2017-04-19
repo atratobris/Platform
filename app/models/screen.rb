@@ -37,13 +37,22 @@ class Screen < Board
     end
   end
 
-
   def run
     sync_data_in
     broadcast
   end
 
   def sync board
-    update! metadata: { type: "link_opener", url: board.metadata.dig('href') }
+    m = metadata
+    m['url'] = board.metadata.dig('href')
+    update! metadata: m
+    ActionCable.server.broadcast "watcher_channel#{user_id}", message: board_activity
   end
+
+  def public_metadata
+    {
+      'url' => metadata['url']
+    }
+  end
+
 end

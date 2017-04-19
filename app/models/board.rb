@@ -100,10 +100,17 @@ class Board < ApplicationRecord
     update! metadata: m
   end
 
+  def public_metadata
+    {}
+  end
+
   protected
 
   def board_activity
-    { mac: mac }
+    {
+      mac: mac,
+      metadata: public_metadata
+    }
   end
 
   def broadcast
@@ -141,6 +148,8 @@ class Board < ApplicationRecord
   def required_info
     {}
   end
+
+
 
 
   # sync the boards which have an ingoing sync_data link from this board

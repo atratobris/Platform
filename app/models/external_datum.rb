@@ -13,6 +13,7 @@
 
 class ExternalDatum < ApplicationRecord
   enum source_type: {
-    cnn: 0
+    cnn: 0,
+    reuters: 1
   }
 end
