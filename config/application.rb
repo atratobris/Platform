@@ -21,7 +21,7 @@ module TestHeroku
     config.middleware.insert_before 0, Rack::Cors do
       allow do
         # to be decided later
-        origins 'localhost:8000', 'localhost:4200'
+        origins 'localhost:8000', 'localhost:4200', 'atratobris.github.io'
         resource '*', headers: :any, methods: [:post, :options, :put, :delete]
       end
     end
