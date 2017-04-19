@@ -60,7 +60,7 @@ module Api
     end
 
     def update_board_params
-      params.permit(:name, :type, metadata: [:status, "13"])
+      params.permit(:name, :type, metadata: [:status, "13", 'source', 'url'])
     end
 
     def find_board

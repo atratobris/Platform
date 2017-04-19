@@ -55,6 +55,12 @@ class Led < Board
     blink
   end
 
+  def public_metadata
+    {
+      LED_PIN => metadata[LED_PIN]
+    }
+  end
+
   private
 
   def current_value

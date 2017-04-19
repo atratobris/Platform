@@ -27,7 +27,11 @@ class NewsArticles < Board
   end
 
   def next
-    data = ExternalDatum.first.data
+    if ExternalDatum.source_types.include? metadata['source']
+      data = ExternalDatum.find_by(source_type: metadata['source']).data
+    else
+      data = ExternalDatum.first.data
+    end
     index = (self.metadata.dig('id').to_i + 1 < data.length) ? metadata.dig('id').to_i + 1 : 0
     update_board data.dig(index, 'title'), data.dig(index, 'href'), index
     broadcast
@@ -35,7 +39,17 @@ class NewsArticles < Board
   end
 
   def update_board value, href, id
-    update! metadata: { value: value, id: id, href: href }
+    m = metadata
+    m['value'] = value
+    m['id'] = id
+    m['href'] = href
+    update! metadata: m
+  end
+
+  def public_metadata
+    {
+      'source' => metadata['source']
+    }
   end
 
 end
