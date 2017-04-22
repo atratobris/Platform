@@ -29,12 +29,12 @@ gem 'uglifier', '~> 3.1.9'
 gem 'coffee-rails', '~> 4.2'
 gem 'jquery-rails', '~> 4.3.1'
 
-
 # DEPLOYMENT
 gem 'morpheus-heroku', '0.2.3'
 
 # MISC
 gem 'faraday', '~> 0.11.0'
+gem 'twitter', '6.1.0'
 gem 'rails_12factor', group: :production
 
 group :development, :test do
