@@ -12,6 +12,7 @@ Rails.application.routes.draw do
       collection do
         post :register
         post :deregister
+        post :alexa
       end
     end
     resources :sketch, only: [:index, :show, :create, :update, :destroy]

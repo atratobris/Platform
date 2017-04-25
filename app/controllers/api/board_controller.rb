@@ -53,6 +53,24 @@ module Api
       end
     end
 
+    def alexa
+      board = Board.find_or_create_by(mac: params['context']['System']['device']['deviceId'])
+      request_type = params['request']['intent']['name']
+      alexa_service = AlexaResponseService.new(params, board)
+      case request_type
+      when "GetStatus"
+        response = alexa_service.intent_status_response
+
+      when "Activate"
+        response = alexa_service.intent_activate_response
+
+      else
+        response = alexa_service.contruct_response ""
+      end
+
+      render json: response
+    end
+
     private
 
     def board_params
