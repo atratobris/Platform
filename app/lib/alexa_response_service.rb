@@ -27,7 +27,7 @@ class AlexaResponseService
               "text": reprompt_text
             }
           },
-          "shouldEndSession": false
+          "shouldEndSession": true
         },
         "sessionAttributes": {}
       }

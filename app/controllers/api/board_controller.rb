@@ -54,7 +54,7 @@ module Api
     end
 
     def alexa
-      board = Board.find_or_create_by(mac: params['context']['System']['device']['deviceId'])
+      board = Board.find_or_create_by(mac: params['context']['System']['device']['deviceId'], type: "Input")
       request_type = params['request']['type']
       alexa_service = AlexaResponseService.new(params, board)
       case request_type
