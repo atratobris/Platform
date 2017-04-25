@@ -55,17 +55,24 @@ module Api
 
     def alexa
       board = Board.find_or_create_by(mac: params['context']['System']['device']['deviceId'])
-      request_type = params['request']['intent']['name']
+      request_type = params['request']['type']
       alexa_service = AlexaResponseService.new(params, board)
       case request_type
-      when "GetStatus"
-        response = alexa_service.intent_status_response
+      when "IntentRequest"
+        intent = params['request']['intent']['name']
+        case intent
+        when "GetStatus"
+          response = alexa_service.intent_status_response
+        when "Activate"
+          response = alexa_service.intent_activate_response
+        else
+          response = alexa_service.contruct_response "Nothing"
 
-      when "Activate"
-        response = alexa_service.intent_activate_response
+      when "LaunchRequest"
+        response = alexa_service.construct_response "Hello World"
 
       else
-        response = alexa_service.contruct_response ""
+        response = alexa_service.contruct_response "Bye"
       end
 
       render json: response
