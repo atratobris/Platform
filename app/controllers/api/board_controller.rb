@@ -66,14 +66,13 @@ module Api
         when "Activate"
           response = alexa_service.intent_activate_response
         else
-          response = alexa_service.contruct_response "Nothing"
+          response = alexa_service.construct_response "Nothing"
         end
-
       when "LaunchRequest"
         response = alexa_service.construct_response "Hello World"
 
       else
-        response = alexa_service.contruct_response "Bye"
+        response = alexa_service.construct_response "Bye"
       end
 
       render json: response

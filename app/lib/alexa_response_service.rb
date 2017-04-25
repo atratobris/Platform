@@ -9,7 +9,7 @@ class AlexaResponseService
   end
 
   # Construct response returned to Skill Interface
-  def contruct_response(text, reprompt_text="", session_attributes=nil, session_end=false)
+  def construct_response(text, reprompt_text="", session_attributes=nil, session_end=false)
     if text.present?
       {"response": {
           "outputSpeech": {
