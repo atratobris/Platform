@@ -55,8 +55,9 @@ class AlexaResponseService
     if @sketch.nil?
       self.construct_response "Sorry, but I am not part of any running sketch"
     else
+      Log.received "Received input from Alexa device"
       InputBroadcastJob.perform_now @board
-      self.construct_response ""
+      self.construct_response "Ok"
     end
   end
 
