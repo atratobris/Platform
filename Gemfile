@@ -29,7 +29,6 @@ gem 'uglifier', '~> 3.1.9'
 gem 'coffee-rails', '~> 4.2'
 gem 'jquery-rails', '~> 4.3.1'
 
-
 # DEPLOYMENT
 gem 'morpheus-heroku', '0.2.3'
 
