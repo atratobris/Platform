@@ -9,7 +9,6 @@ class RegisterChannel < ApplicationCable::Channel
   end
 
   def unsubscribed
-
   end
 
   def register data
