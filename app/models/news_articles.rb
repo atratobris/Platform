@@ -39,6 +39,10 @@ class NewsArticles < Board
     sync_data
   end
 
+  def board_image
+    "https://upload.wikimedia.org/wikipedia/commons/8/8d/News.svg"
+  end
+
   def update_board value, href, id
     m = metadata
     m['value'] = value

@@ -64,9 +64,13 @@ class Board < ApplicationRecord
     set_image_url
   end
 
+  def board_image
+    "https://upload.wikimedia.org/wikipedia/commons/a/af/Raspberrypi_pcb_overview_v04.svg"
+  end
+
   def set_image_url
     if image_url.nil?
-      update! image_url: "https://img.clipartfest.com/f4ec247b6823806c63d79a783c0f1706_big-image-png-raspberry-pi-2-clipart_2305-1950.png"
+      update! image_url: board_image
     end
   end
 

@@ -30,6 +30,10 @@ class Input < Board
     ActionCable.server.broadcast "watcher_channel#{user_id}", message: board_activity
   end
 
+  def board_image
+    "https://upload.wikimedia.org/wikipedia/commons/7/74/Momentary_Switch%2C_Square_%28shaded%29.svg"
+  end
+
   def run
     broadcast
     sketch = find_sketch

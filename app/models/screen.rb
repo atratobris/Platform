@@ -43,6 +43,10 @@ class Screen < Board
     broadcast
   end
 
+  def board_image
+    "https://image.flaticon.com/icons/svg/63/63337.svg"
+  end
+
   def sync board
     m = metadata
     m['url'] = board.metadata.dig('href')

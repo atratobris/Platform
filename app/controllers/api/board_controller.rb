@@ -1,3 +1,4 @@
+
 module Api
   class BoardController < BaseController
     before_action :find_board, only: [:show, :update, :deregister]
@@ -9,6 +10,7 @@ module Api
         @boards = Board.virtualBoards.map { |class_name|
           b = class_name.constantize.new(subtype: "VirtualBoard")
           b.accepted_links = b.get_methods
+          b.image_url = b.board_image
           b
         }
       end

@@ -39,6 +39,10 @@ class Lcd < Board
     update_board "hello world"
   end
 
+  def board_image
+    "https://www.jamesrobertson.eu/svg/2012/oct/13/1602lcd.svg"
+  end
+
   def buna
     update_board "buna dimineata"
   end

@@ -44,6 +44,10 @@ class Led < Board
     broadcast
   end
 
+  def board_image
+    "https://image.flaticon.com/icons/svg/48/48843.svg"
+  end
+
   def blink
     toggle
     sleep(1)
