@@ -16,6 +16,7 @@
 #  user_id         :integer
 #  ip              :string
 #  subtype         :string
+#  image_url       :string
 #
 
 class Board < ApplicationRecord
@@ -30,7 +31,7 @@ class Board < ApplicationRecord
   before_validation :update_last_active, on: :update
   belongs_to :user, optional: true
   after_commit :add_link_types, on: [:update, :create]
-  after_commit  :set_subtype, on: [:create]
+  after_commit :before_create, on: [:create]
 
   enum status: {
     offline: 0,
@@ -56,6 +57,17 @@ class Board < ApplicationRecord
 
   def get_methods
     {}
+  end
+
+  def before_create
+    set_subtype
+    set_image_url
+  end
+
+  def set_image_url
+    if image_url.nil?
+      update! image_url: "https://img.clipartfest.com/f4ec247b6823806c63d79a783c0f1706_big-image-png-raspberry-pi-2-clipart_2305-1950.png"
+    end
   end
 
   def set_subtype

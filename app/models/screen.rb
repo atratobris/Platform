@@ -16,6 +16,7 @@
 #  user_id         :integer
 #  ip              :string
 #  subtype         :string
+#  image_url       :string
 #
 
 class Screen < Board

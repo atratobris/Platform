@@ -16,12 +16,13 @@
 #  user_id         :integer
 #  ip              :string
 #  subtype         :string
+#  image_url       :string
 #
 
 class BoardSerializer < ActiveModel::Serializer
   include ActionView::Helpers::DateHelper
 
-  attributes :id, :mac, :status, :name, :last_activity, :type, :accepted_links, :metadata, :subtype
+  attributes :id, :mac, :status, :name, :last_activity, :type, :accepted_links, :metadata, :subtype, :image_url
 
   def metadata
     object.public_metadata
