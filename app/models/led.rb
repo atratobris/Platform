@@ -16,6 +16,7 @@
 #  user_id         :integer
 #  ip              :string
 #  subtype         :string
+#  image_url       :string
 #
 
 class Led < Board
@@ -41,6 +42,10 @@ class Led < Board
       update_board 0
     end
     broadcast
+  end
+
+  def board_image
+    "https://image.flaticon.com/icons/svg/48/48843.svg"
   end
 
   def blink

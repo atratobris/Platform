@@ -16,6 +16,7 @@
 #  user_id         :integer
 #  ip              :string
 #  subtype         :string
+#  image_url       :string
 #
 
 class Screen < Board
@@ -40,6 +41,10 @@ class Screen < Board
   def run
     sync_data_in
     broadcast
+  end
+
+  def board_image
+    "https://image.flaticon.com/icons/svg/63/63337.svg"
   end
 
   def sync board

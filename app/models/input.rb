@@ -16,6 +16,7 @@
 #  user_id         :integer
 #  ip              :string
 #  subtype         :string
+#  image_url       :string
 #
 
 class Input < Board
@@ -27,6 +28,10 @@ class Input < Board
   def broadcast
     Log.sent "Input Board: #{name}<#{mac}> triggered"
     ActionCable.server.broadcast "watcher_channel#{user_id}", message: board_activity
+  end
+
+  def board_image
+    "https://upload.wikimedia.org/wikipedia/commons/7/74/Momentary_Switch%2C_Square_%28shaded%29.svg"
   end
 
   def run
