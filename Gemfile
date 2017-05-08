@@ -34,6 +34,7 @@ gem 'morpheus-heroku', '0.2.3'
 
 # MISC
 gem 'faraday', '~> 0.11.0'
+gem 'twitter', '6.1.0'
 gem 'rails_12factor', group: :production
 
 group :development, :test do

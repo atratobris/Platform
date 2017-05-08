@@ -7,7 +7,7 @@ RSpec.describe Api::BoardController, type: :controller do
     let!(:bad_board) { create(:board, mac: "5678", user: user, register_status: "unregistered") }
 
     it "only registered boards" do
-      get :index, params: { format: :json, user_id: user.id }
+      get :index, params: { format: :json, subtype: "RealBoard", user_id: user.id }
 
       expect(json_response.count).to eq 1
       expect(json_response.dig(0, "mac")).to eq board.mac
