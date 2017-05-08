@@ -16,6 +16,7 @@
 #  user_id         :integer
 #  ip              :string
 #  subtype         :string
+#  image_url       :string
 #
 
 class Lcd < Board
@@ -36,6 +37,10 @@ class Lcd < Board
 
   def hello
     update_board "hello world"
+  end
+
+  def board_image
+    "https://www.jamesrobertson.eu/svg/2012/oct/13/1602lcd.svg"
   end
 
   def buna

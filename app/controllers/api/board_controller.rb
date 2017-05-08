@@ -1,3 +1,4 @@
+
 module Api
   class BoardController < BaseController
     before_action :find_board, only: [:show, :update, :deregister]
@@ -9,6 +10,7 @@ module Api
         @boards = Board.virtualBoards.map { |class_name|
           b = class_name.constantize.new(subtype: "VirtualBoard")
           b.accepted_links = b.get_methods
+          b.image_url = b.board_image
           b
         }
       end
@@ -51,6 +53,31 @@ module Api
       respond_to do |format|
         format.json { render json: @board }
       end
+    end
+
+    def alexa
+      board = Board.find_or_create_by(mac: params['context']['System']['device']['deviceId'], type: "Input")
+      request_type = params['request']['type']
+      alexa_service = AlexaResponseService.new(params, board)
+      case request_type
+      when "IntentRequest"
+        intent = params['request']['intent']['name']
+        case intent
+        when "GetStatus"
+          response = alexa_service.intent_status_response
+        when "Activate"
+          response = alexa_service.intent_activate_response
+        else
+          response = alexa_service.construct_response "Nothing"
+        end
+      when "LaunchRequest"
+        response = alexa_service.construct_response "Hello World"
+
+      else
+        response = alexa_service.construct_response "Bye"
+      end
+
+      render json: response
     end
 
     private

@@ -16,6 +16,7 @@
 #  user_id         :integer
 #  ip              :string
 #  subtype         :string
+#  image_url       :string
 #
 
 class Board < ApplicationRecord
@@ -24,17 +25,17 @@ class Board < ApplicationRecord
   SketchNotFound = Class.new(RuntimeError)
   include BoardHelper
 
+
   # validates :type, inclusion: { in: BOARD_TYPES, message: "must be one of #{BOARD_TYPES}" }, presence: true
 
   before_validation :update_last_active, on: :update
   belongs_to :user, optional: true
   after_commit :add_link_types, on: [:update, :create]
-  after_commit  :set_subtype, on: [:create]
+  after_commit :before_create, on: [:create]
 
   enum status: {
     offline: 0,
     online: 1
-
   }
 
   enum register_status: {
@@ -56,6 +57,21 @@ class Board < ApplicationRecord
 
   def get_methods
     {}
+  end
+
+  def before_create
+    set_subtype
+    set_image_url
+  end
+
+  def board_image
+    "https://upload.wikimedia.org/wikipedia/commons/a/af/Raspberrypi_pcb_overview_v04.svg"
+  end
+
+  def set_image_url
+    if image_url.nil?
+      update! image_url: board_image
+    end
   end
 
   def set_subtype
@@ -83,12 +99,14 @@ class Board < ApplicationRecord
 
   def add_in_board mac
     m = metadata
+    m["in_boards"] ||= []
     m["in_boards"].push mac
     update! metadata: m
   end
 
   def add_out_board mac
     m = metadata
+    m["out_boards"] ||= []
     m["out_boards"].push mac
     update! metadata: m
   end

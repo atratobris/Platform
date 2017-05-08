@@ -1,4 +1,4 @@
-class CreateDrafts < ActiveRecord::Migration
+class CreateDrafts < ActiveRecord::Migration[5.0]
   def change
     create_table :drafts do |t|
       t.string  :item_type, :null => false

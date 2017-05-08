@@ -16,6 +16,7 @@
 #  user_id         :integer
 #  ip              :string
 #  subtype         :string
+#  image_url       :string
 #
 
 class NewsArticles < Board
@@ -36,6 +37,10 @@ class NewsArticles < Board
     update_board data.dig(index, 'title'), data.dig(index, 'href'), index
     broadcast
     sync_data
+  end
+
+  def board_image
+    "https://upload.wikimedia.org/wikipedia/commons/8/8d/News.svg"
   end
 
   def update_board value, href, id

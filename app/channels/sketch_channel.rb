@@ -30,7 +30,7 @@ class SketchChannel < ApplicationCable::Channel
     if board = Board.find_by(mac: params[:mac])
       board
     else
-      Board.create(mac: params[:mac], type: params[:type])
+      Board.create(mac: params[:mac], type: params[:type], register_status: "registered", user_id: params[:user_id])
     end
   end
 end

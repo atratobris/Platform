@@ -54,8 +54,23 @@ class Purchaser
 
   def fine_new_suitable_board old_board_mac
     old_board_type = old_sketch_boards.detect{ |b| b.mac == old_board_mac }.type
+    old_board_subtype = old_sketch_boards.detect{ |b| b.mac == old_board_mac }.type
     Rails.logger.info "Old type: #{old_board_type}"
-    new_board = Board.for_user(user.id).for_type(old_board_type).take!
+
+    if old_board_subtype == "RealBoard"
+      candidate_boards = Board.for_user(user.id).for_type(old_board_type)
+        .reject { |b| new_sketch.boards.map{|board| board["mac"]}.include?(b.mac) }
+    else
+      candidate_boards = Board.for_user(user.id).for_type(old_board_type)
+        .reject { |b| new_sketch.boards.select{|board| board["user_id"] == user.id}.map{|board| board["mac"]}.include?(b.mac) }
+      if candidate_boards.empty?
+        type_count = Board.for_user(user.id).for_type(old_board_type).count
+        mac = "#{old_board_type}#{type_count}"
+        candidate_boards.push( Board.create(type: old_board_type, name: old_board_type, subtype: old_board_subtype, mac: mac, user_id: user.id) )
+      end
+    end
+
+    new_board = candidate_boards.first
     Rails.logger.info "Found suitable board: #{new_board.name}<#{new_board.mac}> | type: #{new_board.type}"
     new_board
   end
