@@ -20,13 +20,10 @@
 #
 
 class Board < ApplicationRecord
-  # BOARD_TYPES = %w[ Input Lcd Led Pseudoboard Screen ]
-  VIRTUAL_BOARDS = ["NewsArticles", "Andboard"]
-  SketchNotFound = Class.new(RuntimeError)
   include BoardHelper
 
-
-  # validates :type, inclusion: { in: BOARD_TYPES, message: "must be one of #{BOARD_TYPES}" }, presence: true
+  VIRTUAL_BOARDS = ["NewsArticles", "Andboard", "TwitterBoard"]
+  SketchNotFound = Class.new(RuntimeError)
 
   before_validation :update_last_active, on: :update
   belongs_to :user, optional: true
@@ -46,13 +43,10 @@ class Board < ApplicationRecord
 
   scope :for_user, -> (user_id) { where(user_id: user_id) }
   scope :for_type, -> (type) { where(type: type) }
+  scope :virtual_boards, -> { where(subtype: "VirtualBoard") }
 
   def run
     sync_data
-  end
-
-  def self.virtualBoards
-    VIRTUAL_BOARDS
   end
 
   def get_methods
@@ -151,7 +145,7 @@ class Board < ApplicationRecord
   end
 
   def add_link_types
-    return if accepted_links.with_indifferent_access == get_methods.with_indifferent_access()
+    return if accepted_links.with_indifferent_access == get_methods.with_indifferent_access
     update! accepted_links: get_methods
   end
 
@@ -167,10 +161,6 @@ class Board < ApplicationRecord
     {}
   end
 
-
-
-
-  # sync the boards which have an ingoing sync_data link from this board
   def sync_data
     sketch = find_sketch
     links = sketch.links.select{ |l| l["logic"] == "sync_data"}
@@ -182,7 +172,6 @@ class Board < ApplicationRecord
       end
     end
   end
-
 
   def alert_error
     Log.create! log_type: "error", message: "Couldn't find active sketch for #{name}<#{mac}>"
