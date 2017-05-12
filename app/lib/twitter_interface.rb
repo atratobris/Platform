@@ -1,4 +1,6 @@
 class TwitterInterface
+  INTERVAL = 30.seconds
+
   attr_reader :client
 
   def initialize
@@ -28,7 +30,14 @@ class TwitterInterface
   end
 
   def check_twitter_activity board
-    last_tweet = get_last_tweet board
+    last_tweet = extract_info get_last_tweet board
+    if board.last_tweet.present? && board.last_tweet.dig("url") != last_tweet["url"]
+
+    elsif Time.current - last_tweet["created_at"] < INTERVAL
+
+    else #Ignore Tweet
+      Rails.logger.debug "TwitterInterface: Ignoring Tweet #{last_tweet[:handle]} for board #{board.mac}"
+    end
   end
 
   def get_last_tweet board
@@ -37,5 +46,16 @@ class TwitterInterface
     elsif board.source.start_with?("#")
       client.search(board.source).first
     end
+  end
+
+  def extract_info tweet
+    url = tweet.url
+    {
+      url: "#{url.scheme}://#{url.host}#{url.path}",
+      user: tweet.user.name,
+      handle: tweet.user.screen_name,
+      text: tweet.text,
+      created_at: tweet.created_at
+    }.stringify_keys
   end
 end

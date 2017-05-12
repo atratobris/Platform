@@ -16,7 +16,7 @@ class TwitterBoard < Board
   end
 
   def last_tweet
-    metadata["last_tweet"]
+    metadata["last_tweet"].with_indifferent_access
   end
 
   def source
