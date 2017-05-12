@@ -7,11 +7,7 @@ class TwitterInterface
     @client = config_client
   end
 
-  def catalins_tweets
-    client.user_timeline("cionescu1")
-  end
-
-  def find_sketches
+  def run
     Sketch.active.each do |sketch|
       next unless board = sketch.find_twitter_board
       check_twitter_activity board
@@ -30,11 +26,11 @@ class TwitterInterface
   end
 
   def check_twitter_activity board
-    last_tweet = extract_info get_last_tweet board
+    return unless last_tweet = extract_info(get_last_tweet(board))
     if board.last_tweet.present? && board.last_tweet.dig("url") != last_tweet["url"]
-
+      save_tweet_and_execute last_tweet, board
     elsif Time.current - last_tweet["created_at"] < INTERVAL
-
+      save_tweet_and_execute last_tweet, board
     else #Ignore Tweet
       Rails.logger.debug "TwitterInterface: Ignoring Tweet #{last_tweet[:handle]} for board #{board.mac}"
     end
@@ -49,6 +45,10 @@ class TwitterInterface
   end
 
   def extract_info tweet
+    if tweet.nil?
+      Rails.logger.debug "TwitterInterface: Can't extract info, Tweet is nil."
+      return false
+    end
     url = tweet.url
     {
       url: "#{url.scheme}://#{url.host}#{url.path}",
@@ -57,5 +57,11 @@ class TwitterInterface
       text: tweet.text,
       created_at: tweet.created_at
     }.stringify_keys
+  end
+
+  def save_tweet_and_execute tweet, board
+    board.metadata["last_tweet"] = tweet
+    board.save!
+    board.execute
   end
 end
