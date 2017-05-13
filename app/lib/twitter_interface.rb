@@ -1,5 +1,5 @@
 class TwitterInterface
-  INTERVAL = 30.seconds
+  INTERVAL = 1.seconds
 
   attr_reader :client
 
@@ -8,6 +8,7 @@ class TwitterInterface
   end
 
   def run
+    puts "Active Sketches: #{Sketch.active.count}"
     Sketch.active.each do |sketch|
       next unless board = sketch.find_twitter_board
       check_twitter_activity board
@@ -32,13 +33,13 @@ class TwitterInterface
     elsif Time.current - last_tweet["created_at"] < INTERVAL
       save_tweet_and_execute last_tweet, board
     else #Ignore Tweet
-      Rails.logger.debug "TwitterInterface: Ignoring Tweet #{last_tweet[:handle]} for board #{board.mac}"
+      puts "TwitterInterface: Ignoring Tweet #{last_tweet[:handle]} for board #{board.mac}"
     end
   end
 
   def get_last_tweet board
     if board.source.start_with?("@")
-      client.user_timeline(board.source.remove!("@")).first
+      client.user_timeline(board.source.gsub("@", "")).first
     elsif board.source.start_with?("#")
       client.search(board.source).first
     end
@@ -46,7 +47,7 @@ class TwitterInterface
 
   def extract_info tweet
     if tweet.nil?
-      Rails.logger.debug "TwitterInterface: Can't extract info, Tweet is nil."
+      puts "TwitterInterface: Can't extract info, Tweet is nil."
       return false
     end
     url = tweet.url
@@ -62,6 +63,7 @@ class TwitterInterface
   def save_tweet_and_execute tweet, board
     board.metadata["last_tweet"] = tweet
     board.save!
+    puts "Executing the command for source: #{board.source}"
     board.execute
   end
 end
