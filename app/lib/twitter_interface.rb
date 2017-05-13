@@ -33,7 +33,7 @@ class TwitterInterface
     elsif Time.current - last_tweet["created_at"] < INTERVAL
       save_tweet_and_execute last_tweet, board
     else #Ignore Tweet
-      puts "TwitterInterface: Ignoring Tweet #{last_tweet[:handle]} for board #{board.mac}"
+      puts "TwitterInterface: Ignoring Tweet #{last_tweet[:handle]} for board #{board.source}"
     end
   end
 
@@ -51,6 +51,7 @@ class TwitterInterface
       return false
     end
     url = tweet.url
+    puts "Last tweet #{tweet.user.name} text: #{tweet.text}"
     {
       url: "#{url.scheme}://#{url.host}#{url.path}",
       user: tweet.user.name,

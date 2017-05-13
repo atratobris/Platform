@@ -1,10 +1,11 @@
 namespace :jobs do
   desc 'Gets Series Info'
   task blah: :environment do
-    1000.times do |i|
+    iterations = (10.minutes - TwitterInterface::INTERVAL).to_i
+    iterations.times do |i|
       TwitterInterface.new.run
       sleep TwitterInterface::INTERVAL
-      puts "Run: #{i} -------- "
+      puts "Run: #{i} out of #{iterations} -------- "
     end
   end
 end
