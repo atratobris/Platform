@@ -52,9 +52,7 @@ class NewsArticles < Board
   end
 
   def public_metadata
-    {
-      'source' => metadata['source']
-    }
+    { source: metadata['source'] }
   end
 
 end

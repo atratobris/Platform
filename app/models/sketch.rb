@@ -54,12 +54,19 @@ class Sketch < ApplicationRecord
         Board.find_or_create_by(board)
       end
       # clear boards metadata
-      Board.for_user(user_id).find_by(mac: board['mac']).clear_boards_metadata
+      Board.for_user(user_id).find_by(mac: board['mac'])&.clear_boards_metadata
     end
     links.each do |link|
-      Board.find_by(mac: link['to']).add_in_board link['from']
-      Board.find_by(mac: link['from']).add_out_board link['to']
+      Board.find_by(mac: link['to'])&.add_in_board link['from']
+      Board.find_by(mac: link['from'])&.add_out_board link['to']
     end
+  end
+
+  def find_twitter_board
+    Board
+      .where(mac: boards.map{ |b| b["mac"] })
+      .for_type("TwitterBoard")
+      .first
   end
 
   private

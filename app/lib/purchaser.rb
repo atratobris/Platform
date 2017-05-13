@@ -53,7 +53,7 @@ class Purchaser
   end
 
   def fine_new_suitable_board old_board_mac
-    old_board_type = old_sketch_boards.detect{ |b| b.mac == old_board_mac }.type
+    old_board_type = old_sketch_boards.detect{ |b| b.mac == old_board_mac }.type rescue binding.pry
     old_board_subtype = old_sketch_boards.detect{ |b| b.mac == old_board_mac }.type
     Rails.logger.info "Old type: #{old_board_type}"
 

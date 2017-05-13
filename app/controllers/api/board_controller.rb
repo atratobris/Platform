@@ -4,11 +4,11 @@ module Api
     before_action :find_board, only: [:show, :update, :deregister]
 
     def index
-      if params[:subtype]=="RealBoard"
+      if params[:subtype] == "RealBoard"
         @boards = board_scope.where(params.permit(:subtype)).registered.order(:id).limit 10
       else
-        @boards = Board.virtualBoards.map { |class_name|
-          b = class_name.constantize.new(subtype: "VirtualBoard")
+        @boards = Board::VIRTUAL_BOARDS.map { |klass|
+          b = klass.constantize.new(subtype: "VirtualBoard")
           b.accepted_links = b.get_methods
           b.image_url = b.board_image
           b
