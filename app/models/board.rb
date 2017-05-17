@@ -116,14 +116,21 @@ class Board < ApplicationRecord
     {}
   end
 
+  def report_status
+    ActionCable.server.broadcast "watcher_channel#{user_id}", message: board_activity
+  end
+
   protected
 
   def board_activity
     {
       mac: mac,
-      metadata: public_metadata
+      metadata: public_metadata,
+      status: status
     }
   end
+
+
 
   def broadcast
     Log.sent "Board: #{name}<#{mac}> broadcasting (#{metadata}) to channel"

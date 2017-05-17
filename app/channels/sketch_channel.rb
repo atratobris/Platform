@@ -5,6 +5,7 @@ class SketchChannel < ApplicationCable::Channel
     if board = find_board
       Log.connect(board.name, board.mac, CHANNEL_NAME)
       board.update status: "online"
+      board.report_status
     else
       Log.error "Invalid Board params(#{params.inspect}) #{board.mac}"
     end
@@ -14,6 +15,7 @@ class SketchChannel < ApplicationCable::Channel
     if board = Board.find_by(mac: params[:mac])
       Log.disconnect(board.name, board.mac, CHANNEL_NAME)
       board.update status: "offline"
+      board.report_status
     end
   end
 
