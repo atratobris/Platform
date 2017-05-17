@@ -34,11 +34,11 @@ class Log < ApplicationRecord
   end
 
   def self.connect board_name, board_mac, channel
-    create! log_type: "connected", message: "Board: #{board_name}<#{board_mac}> connected to the #{channel}."
+    create! log_type: "connected", message: "Board: #{board_name}<#{board_mac.truncate(20)}> connected to the #{channel}."
   end
 
   def self.disconnect board_name, board_mac, channel
-    create! log_type: "disconnected", message: "Board: #{board_name}<#{board_mac}> disconnected from the #{channel}."
+    create! log_type: "disconnected", message: "Board: #{board_name}<#{board_mac.truncate(20)}> disconnected from the #{channel}."
   end
 
   def self.error message
@@ -54,7 +54,7 @@ class Log < ApplicationRecord
   end
 
   def self.register board, old_status
-    create! log_type: "register", message: "Board: #{board.name}<#{board.mac}> changed from #{old_status} to #{board.register_status}"
+    create! log_type: "register", message: "Board: #{board.name}<#{board.mac.truncate(20)}> changed from #{old_status} to #{board.register_status}"
   end
 
   private
