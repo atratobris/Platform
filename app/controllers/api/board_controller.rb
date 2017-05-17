@@ -1,4 +1,3 @@
-
 module Api
   class BoardController < BaseController
     before_action :find_board, only: [:show, :update, :deregister]
@@ -91,7 +90,8 @@ module Api
     end
 
     def find_board
-      @board = board_scope.find_by(mac: params[:id]).presence || board_scope.find(params[:id])
+      id = URI.decode(params[:id]) if params[:id].include?("%2E")
+      @board = board_scope.find_by(mac: id).presence || board_scope.find(id)
     end
 
     def board_scope
