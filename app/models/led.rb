@@ -26,7 +26,8 @@ class Led < Board
     {
       toggle: "turn on or off",
       blink: "blink once",
-      blink_twice: "blink twice"
+      blink_twice: "blink twice",
+      sync_data: "Sync value"
     }
   end
 
@@ -42,6 +43,7 @@ class Led < Board
       update_board 0
     end
     broadcast
+    sync_data
   end
 
   def board_image
@@ -66,7 +68,13 @@ class Led < Board
     }
   end
 
+  def sync board
+    update_board board.metadata.dig(LED_PIN)
+  end
+
   private
+
+
 
   def current_value
     metadata[LED_PIN].to_i
