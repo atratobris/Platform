@@ -48,7 +48,7 @@ class TwitterBoard < Board
     sketch.links.each do |link|
       if link["from"] == mac
         target_board = Board.find_by(mac: link["to"])
-        target_board.metadata['url'] = last_tweet.dig("url")
+        target_board.metadata['url'] = last_tweet.dig("url") if last_tweet
         target_board.save!
         Link.new(link['from'], link['to'], link['logic']).run
       end
