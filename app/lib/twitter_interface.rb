@@ -33,7 +33,7 @@ class TwitterInterface
     end
     if board.last_tweet.present? && board.last_tweet.dig("url") != last_tweet["url"]
       save_tweet_and_execute last_tweet, board
-    elsif Time.current - last_tweet["created_at"] < 10.seconds.to_i
+    elsif Time.current - last_tweet["created_at"] < 60.seconds.to_i
       save_tweet_and_execute last_tweet, board
     else #Ignore Tweet
       Log.error "TwitterBoard #{board.source} has no new tweet. Last one: #{last_tweet['text']}. Time: #{Time.current}. Last: #{last_tweet['created_at']}. Diff: #{Time.current - last_tweet['created_at']}"
