@@ -46,7 +46,7 @@ module Api
     end
 
     def deregister
-      @board.update register_status: 'unregistered'
+      @board.update register_status: 'unregistered', user_id: nil
       Log.register(@board, 'registered')
       ActionCable.server.broadcast 'register_channel', board: @board, type: 'deregister_board'
       respond_to do |format|
