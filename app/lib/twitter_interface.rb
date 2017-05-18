@@ -33,7 +33,8 @@ class TwitterInterface
     elsif Time.current - last_tweet["created_at"] < INTERVAL
       save_tweet_and_execute last_tweet, board
     else #Ignore Tweet
-      puts "TwitterInterface: Ignoring Tweet #{last_tweet[:handle]} for board #{board.source}"
+      Log.error "TwitterBoard #{board.source} has no new tweet. Last one: #{last_tweet['text']}"
+      puts "TwitterInterface: Ignoring Tweet #{last_tweet['handle']} for board #{board.source}"
     end
   end
 
@@ -62,6 +63,7 @@ class TwitterInterface
   end
 
   def save_tweet_and_execute tweet, board
+    Log.sent "TwitterBoard #{board.source} activated!"
     board.metadata["last_tweet"] = tweet
     board.save!
     puts "Executing the command for source: #{board.source}"
