@@ -90,7 +90,7 @@ module Api
     end
 
     def find_board
-      id = URI.decode(params[:id]) if params[:id].include?("%2E")
+      id = URI.decode(params[:id].to_s)
       @board = board_scope.find_by(mac: id).presence || board_scope.find(id)
     end
 
