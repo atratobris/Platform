@@ -34,6 +34,12 @@ class TwitterBoard < Board
   def run
     Log.sent "Twitter Input Board with source: #{source} triggered"
     broadcast
+    sketch = find_sketch
+    links = find_links sketch, key: 'from'
+    links.each do |link|
+      Link.new(link['from'], link['to'], link['logic']).run
+    end
+    super
   end
 
   def sync_and_run
@@ -44,7 +50,7 @@ class TwitterBoard < Board
         target_board = Board.find_by(mac: link["to"])
         target_board.metadata['url'] = last_tweet.dig("url")
         target_board.save!
-        target_board.broadcast
+        Link.new(link['from'], link['to'], link['logic']).run
       end
     end
   end
