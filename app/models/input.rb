@@ -26,7 +26,7 @@ class Input < Board
   end
 
   def broadcast
-    Log.sent "Input Board: #{name}<#{mac}> triggered"
+    Log.sent "Input Board: #{name}<#{mac.truncate(20)}> triggered"
     ActionCable.server.broadcast "watcher_channel#{user_id}", message: board_activity
   end
 
