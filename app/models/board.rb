@@ -178,6 +178,7 @@ class Board < ApplicationRecord
         b.sync self
       end
     end
+
   end
 
   def alert_error

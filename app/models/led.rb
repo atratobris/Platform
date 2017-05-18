@@ -54,12 +54,14 @@ class Led < Board
     toggle
     sleep(1)
     toggle
+    sync_data
   end
 
   def blink_twice
     blink
     sleep(1)
     blink
+    sync_data
   end
 
   def public_metadata
@@ -70,11 +72,10 @@ class Led < Board
 
   def sync board
     update_board board.metadata.dig(LED_PIN)
+    broadcast
   end
 
   private
-
-
 
   def current_value
     metadata[LED_PIN].to_i

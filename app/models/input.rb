@@ -41,6 +41,6 @@ class Input < Board
     links.each do |link|
       Link.new(link['from'], link['to'], link['logic']).run
     end
-    super
+    # super
   end
 end
