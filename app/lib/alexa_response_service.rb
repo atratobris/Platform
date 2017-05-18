@@ -61,5 +61,10 @@ class AlexaResponseService
     end
   end
 
+  def intent_story_response
+    story_text = "A man had a horse and the horse had nothing against him"
+    self.construct_response story_text
+  end
+
 
 end
