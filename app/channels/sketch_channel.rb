@@ -4,6 +4,9 @@ class SketchChannel < ApplicationCable::Channel
     stream_from "sketch_channel#{params[:mac]}"
     if board = find_board
       Log.connect(board.name, board.mac, CHANNEL_NAME)
+      if !params[:user_id].nil?
+        board.update(register_status: "registered", user_id: params[:user_id])
+      end
       board.update status: "online"
       board.report_status
     else
