@@ -48,7 +48,7 @@ module Api
     def deregister
       @board.update register_status: 'unregistered', user_id: nil
       Log.register(@board, 'registered')
-      ActionCable.server.broadcast "register_channel#{board.mac}", board: @board, type: 'deregister_board'
+      ActionCable.server.broadcast "register_channel#{@board.mac}", board: @board, type: 'deregister_board'
       respond_to do |format|
         format.json { render json: @board }
       end
