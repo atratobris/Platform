@@ -31,16 +31,35 @@ class TwitterInterface
       Log.error "TwitterBoard couldn't extract data #{board.source}"
       return
     end
-    if board.last_tweet.present? && board.last_tweet.dig("url") != last_tweet["url"]
-      save_tweet_and_execute last_tweet, board
-    elsif Time.current - last_tweet["created_at"] < 60.seconds.to_i
-      save_tweet_and_execute last_tweet, board
-    else #Ignore Tweet
-      Log.error "TwitterBoard #{board.source} has no new tweet. Last one: #{last_tweet['text']}. Time: #{Time.current}. Last: #{last_tweet['created_at']}. Diff: #{Time.current - last_tweet['created_at']}"
-      puts "TwitterInterface: Ignoring Tweet #{last_tweet['handle']} for board #{board.source}"
+
+    if board.last_tweet.present?
+      if board.board.last_tweet.dig("url") != last_tweet["url"]
+        save_tweet_and_execute last_tweet, board
+      else
+        ignore_tweet last_tweet, board
+      end
+    else
+      if Time.current - last_tweet["created_at"] < 60.seconds.to_i
+        save_tweet_and_execute last_tweet, board
+      else
+        ignore_tweet last_tweet, board
+      end
     end
+
+    # if board.last_tweet.present? && board.last_tweet.dig("url") != last_tweet["url"]
+    #   save_tweet_and_execute last_tweet, board
+    # elsif Time.current - last_tweet["created_at"] < 60.seconds.to_i
+    #   save_tweet_and_execute last_tweet, board
+    # else #Ignore Tweet
+    #   Log.error "TwitterBoard #{board.source} has no new tweet. Last one: #{last_tweet['text']}. Time: #{Time.current}. Last: #{last_tweet['created_at']}. Diff: #{Time.current - last_tweet['created_at']}"
+    #   puts "TwitterInterface: Ignoring Tweet #{last_tweet['handle']} for board #{board.source}"
+    # end
   end
 
+  def ignore_tweet last_tweet, board
+    Log.error "TwitterBoard #{board.source} has no new tweet. Last one: #{last_tweet['text']}. Time: #{Time.current}. Last: #{last_tweet['created_at']}. Diff: #{Time.current - last_tweet['created_at']}"
+    puts "TwitterInterface: Ignoring Tweet #{last_tweet['handle']} for board #{board.source}"
+  end
   def get_last_tweet board
     if board.source.start_with?("@")
       client.user_timeline(board.source.gsub("@", "")).first
