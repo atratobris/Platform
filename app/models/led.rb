@@ -43,6 +43,7 @@ class Led < Board
       update_board 0
     end
     broadcast
+    sync_data
   end
 
   def board_image
