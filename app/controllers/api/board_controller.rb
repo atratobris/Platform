@@ -67,6 +67,8 @@ module Api
           response = alexa_service.intent_status_response
         when "Activate"
           response = alexa_service.intent_activate_response
+        when "Story"
+          response = alexa_service.intent_story_response
         else
           response = alexa_service.construct_response "Nothing"
         end
