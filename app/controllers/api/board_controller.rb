@@ -10,6 +10,7 @@ module Api
           b = klass.constantize.new(subtype: "VirtualBoard")
           b.accepted_links = b.get_methods
           b.image_url = b.board_image
+          b.metadata = b.public_metadata
           b
         }
       end

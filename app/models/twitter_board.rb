@@ -56,7 +56,7 @@ class TwitterBoard < Board
   end
 
   def public_metadata
-    { source: source }
+    { 'source': source }
   end
 
   def last_tweet

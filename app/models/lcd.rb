@@ -52,4 +52,8 @@ class Lcd < Board
     broadcast
   end
 
+  def public_metadata
+    { 'value' => metadata['value'] }
+  end
+
 end
