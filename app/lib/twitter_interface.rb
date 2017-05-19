@@ -1,5 +1,5 @@
 class TwitterInterface
-  INTERVAL = 2.seconds
+  INTERVAL = 6.seconds
 
   attr_reader :client
 
